@@ -1,0 +1,14 @@
+.Add {
+    border: none;
+    outline: none;
+    color: #20e3cf;
+    font-size: 50px;
+    background-color: white;
+    cursor: pointer;
+    padding: 0;
+    height: auto;
+}
+
+.Add:active {
+    transform: scale(0.9);
+}

@@ -1,0 +1,40 @@
+.Player {
+    border-top: 2px solid #20e3cf;
+    background-color: white;
+    position: fixed;
+    bottom: 0;
+    height: 100px;
+    width: 100%;
+}
+
+.Name {
+    color: #20e3cf;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.Container {
+    background-color: white;
+    border: 1px solid #20e3cf;
+    cursor: pointer;
+    margin: 10px 0;
+    height: 8px;
+    width: 70%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.Progress {
+    background-color: #20e3cf;
+    height: 105%;
+    width: 0%;
+    transition: width 0.1s linear;
+}
+
+.Icon {
+    margin: 0 20px;
+    color: #20e3cf;
+    cursor: pointer;
+}

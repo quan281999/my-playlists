@@ -1,0 +1,35 @@
+.Input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.Label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.InputEl {
+    outline: none;
+    margin: 3px;
+    border: 1px solid #c9c9c9;
+    background-color: white;
+    font: inherit;
+    padding: 6px 10px;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    font-weight: normal;
+}
+
+.Invalid {
+    border: 2px solid red;
+}
+
+.Error {
+    margin: 0;
+    margin-top: 10px;
+    color: red;
+    font-size: 14px;
+}

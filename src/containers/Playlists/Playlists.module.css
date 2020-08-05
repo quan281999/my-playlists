@@ -1,0 +1,9 @@
+.Playlists {
+    position: relative;
+    top: 75px;
+}
+
+.Playlists h1 {
+    margin-bottom: 5px;
+    font-size: 45px;
+}

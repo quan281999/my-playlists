@@ -1,0 +1,44 @@
+.Song {
+    text-align: left;
+    position: relative;
+    width: 70%;
+    border-top: 2px solid #c9c9c9;
+    box-sizing: border-box;
+    margin: 15px auto;
+    cursor: pointer;
+}
+.Song:first-of-type {
+    border-top: none;
+}
+
+.Song .Name {
+    color: #c9c9c9;
+    font-size: 25px;
+    font-weight: bold;
+    margin: 15px 5px;
+    width: 90%;
+}
+
+.Song .Delete {
+    border: none;
+    outline: none;
+    background-color: white;
+    color: #20e3cf;
+    font-size: 25px;
+    font-weight: bold;
+    position: absolute;
+    right: 10px;
+    bottom: 40%;
+    transform: translateY(50%);
+    cursor: pointer;
+}
+
+.Song .Delete:active {
+    transform: scale(0.9) translateY(50%);
+}
+
+@media (max-width: 499px) {
+    .Song {
+        width: 90%;
+    }
+}

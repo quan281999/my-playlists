@@ -1,0 +1,48 @@
+.Songs {
+    position: relative;
+    top: 75px;
+    margin-bottom: 120px;
+}
+
+.Songs .Name {
+    margin-bottom: 5px;
+    color: #20e3cf;
+    font-size: 45px;
+}
+
+.Songs .Mode {
+    position: relative;
+    width: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 2px solid #c9c9c9;
+    color: #20e3cf;
+    font-weight: bold;
+}
+
+.DragDrop {
+    height: 300px;
+    width: 450px;
+    border: 2px solid #20e3cf;
+    margin: 15px 0px;
+    overflow: auto;
+}
+
+.Upload {
+    font-size: 20px;
+    border: 2px solid #20e3cf;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+@media (max-width: 499px) {
+    .DragDrop {
+        height: 300px;
+        width: 200px;
+    }
+}
