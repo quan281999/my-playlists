@@ -33,7 +33,10 @@ class Player extends Component {
 
         // Play the song when the user select a new song
         if (prevProps.url !== this.props.url) {
+            console.log(prevProps.url, this.props.url);
             this.setState({playing: true})
+        } else {
+            // console.log('hay');
         }
     }
 

@@ -8,7 +8,8 @@ const initialState = {
     deleting: false,
     loading: false,
     playingId: null,
-    playingOrder: []
+    playingOrder: [],
+    error: null
 }
 
 // Add selected files to the state
@@ -40,19 +41,30 @@ const addingEnd = (state) => {
     })
 }
 
-// Begin to add songs to the storage and the database
+// Begin to add new songs to the storage and the database
 const addSongsStart = (state) => {
     return updateObject(state, {
-        loading: true
+        loading: true,
+        error: null
     })
 }
 
-// Successfully adding songs
+// Successfully adding new songs
 const addSongsSuccess = (state) => {
     return updateObject(state, {
-        loading: false
+        loading: false,
+        error: null
     })
 }
+
+// Fail to add new songs
+const addSongsFail = (state, action) => {
+    return updateObject(state, {
+        loading: false,
+        error: action.error
+    })
+}
+
 // Play a song
 const playSong = (state, action) => {
     return updateObject(state, {
@@ -90,6 +102,14 @@ const deleteSongSuccess = (state) => {
     });
 }
 
+// Fail to delete the selected song
+const deleteSongsFail = (state, action) => {
+    return updateObject(state, {
+        loading: false,
+        error: action.error
+    })
+}
+
 // Set up the array that contains the order of songs
 const setPlayingOrder = (state, action) => {
     if (action.length === 0 || !action.length) {
@@ -125,6 +145,22 @@ const setPlayingOrder = (state, action) => {
     })
 }
 
+// Reset the state after deleting the song that was being play
+const resetPlaying = (state) => {
+    return updateObject(state, {
+        playingId: null
+    })
+}
+
+// Set the songs and the id of the playing song if there is a song being play
+// during the delete process
+const setSongsAfterDelete = (state, action) => {
+    return updateObject(state, {
+        songs: action.songs,
+        playingId: action.playingId
+    })
+}
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.ADD_FILES: return addFiles(state, action);
@@ -133,12 +169,16 @@ const reducer = (state = initialState, action) => {
         case actionTypes.ADDING_SONGS_END: return addingEnd(state);
         case actionTypes.ADD_SONGS_START: return addSongsStart(state);
         case actionTypes.ADD_SONGS_SUCCESS: return addSongsSuccess(state);
+        case actionTypes.ADD_SONGS_FAIL: return addSongsFail(state, action);
         case actionTypes.PLAY_SONG: return playSong(state, action);
         case actionTypes.DELETING_SONG_START: return deletingStart(state);
         case actionTypes.DELETING_SONG_END: return deletingEnd(state);
         case actionTypes.DELETE_SONG_START: return deleteSongStart(state);
         case actionTypes.DELETE_SONG_SUCCESS: return deleteSongSuccess(state);
+        case actionTypes.DELETE_SONGS_FAIL: return deleteSongsFail(state, action);
         case actionTypes.SET_PLAYING_ORDER: return setPlayingOrder(state, action);
+        case actionTypes.RESET_PLAYING: return resetPlaying(state);
+        case actionTypes.SET_SONGS_AFTER_DELETE: return setSongsAfterDelete(state, action);
         default: return state;
     }
 }

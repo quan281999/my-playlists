@@ -134,7 +134,7 @@ class Songs extends Component {
                     top='20%'>
                         <h1 style={{marginTop: '5px'}}>Add Songs</h1>
                         <small style={{color: '#c9c9c9'}}>
-                            Only .mp3 and .audio files!
+                            Only audio files!
                         </small>
                         <DragDrop handleDrop={this.handleDrop}>
                             <div className={classes.DragDrop}>
@@ -197,6 +197,27 @@ class Songs extends Component {
             );
         }
 
+        // Check whether there is error or not
+        if (this.props.error && this.props.adding) {
+            modal = (
+                <Modal 
+                    show={true} 
+                    close={this.closeModal}
+                    top='40%'>
+                        <p>{this.props.error.message}</p>
+                </Modal>
+            );
+        } else if (this.props.error && this.props.deleting) {
+            deleteModal = (
+                <Modal 
+                    show={true} 
+                    close={this.closeDeleteModal}
+                    top='40%'>
+                        <p>{this.props.error.message}</p>
+                </Modal>
+            );
+        }
+
         // Set up the mode
         const mode = (
             <Input 
@@ -243,7 +264,8 @@ const mapStateToProps = state => {
         adding: state.songs.adding,
         deleting: state.songs.deleting,
         loading: state.songs.loading,
-        playingId: state.songs.playingId
+        playingId: state.songs.playingId,
+        error: state.songs.error
     }
 }
 

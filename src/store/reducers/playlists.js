@@ -26,7 +26,7 @@ const addingEnd = (state) => {
 }
 
 
-// Begin to add new playlist
+// Begin to add the new playlist
 const addPlaylistStart = (state) => {
     return updateObject(state, { 
         modalLoading: true,
@@ -34,14 +34,14 @@ const addPlaylistStart = (state) => {
     });
 }
 
-// Successfully add new playlist
+// Successfully add the new playlist
 const addPlaylistSuccess = (state) => {
     return updateObject(state, { 
         modalLoading: false,
         error: null
     });
 }
- // Fail to add new playlist
+ // Fail to add the new playlist
 const addPlaylistFail = (state, action) => {
     return updateObject(state, { 
         modalLoading: false,
@@ -52,7 +52,8 @@ const addPlaylistFail = (state, action) => {
 // Begin to get playlists from the database
 const getPlaylistsStart = (state) => {
     return updateObject(state, {
-        loading: true
+        loading: true,
+        error: null
     })
 }
 
@@ -60,7 +61,8 @@ const getPlaylistsStart = (state) => {
 const getPlaylistsSuccess = (state, action) => {
     return updateObject(state, {
         playlists: action.playlists,
-        loading: false
+        loading: false,
+        error: null
     })
 }
 
@@ -95,6 +97,14 @@ const deletePlaylistSuccess = (state, action) => {
     });
 }
 
+ // Fail to delete the selected playlist
+ const deletePlaylistFail = (state, action) => {
+    return updateObject(state, { 
+        modalLoading: false,
+        error: action.error
+    });
+}
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.ADD_PLAYLIST_START: return addPlaylistStart(state);
@@ -108,6 +118,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.DELETING_PLAYLIST_END: return deletingEnd(state);
         case actionTypes.DELETE_PLAYLIST_START: return deletePlaylistStart(state);
         case actionTypes.DELETE_PLAYLIST_SUCCESS: return deletePlaylistSuccess(state, action);
+        case actionTypes.DELETE_PLAYLIST_FAIL: return deletePlaylistFail(state, action);
         default: return state;
     }
 }

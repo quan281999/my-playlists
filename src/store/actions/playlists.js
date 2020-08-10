@@ -54,13 +54,6 @@ const getPlaylistsSuccess = (playlists) => {
     }
 }
 
-const getPlaylistsFail = (error) => {
-    return {
-        type: actionTypes.GET_PLAYLISTS_FAIL,
-        error
-    }
-}
-
 // Get playlists from the database
 export const getPlaylists = (userId) => {
     return dispatch => {
@@ -96,6 +89,13 @@ const deletePlaylistSuccess = (playlists) => {
     }
 }
 
+const deletePlaylistFail = (error) => {
+    return {
+        type: actionTypes.DELETE_PLAYLIST_FAIL,
+        error
+    }
+}
+
 // Delete the selected playlist in the database
 export const deletePlaylist = (index, userId, playlists) => {
     return dispatch => {
@@ -103,10 +103,14 @@ export const deletePlaylist = (index, userId, playlists) => {
         const newPlaylists = [...playlists.slice(0, index), ...playlists.slice(index + 1)];
         var update = {};
         update['/' + userId] = {playlists: newPlaylists};
-        projectDatabase.ref().update(update).then(() => {
+        projectDatabase.ref().update(update)
+            .then(() => {
             dispatch(deletePlaylistSuccess(newPlaylists));
             dispatch(deletingPlaylistEnd());
-        })
+            })
+            .catch(err => {
+                dispatch(deletePlaylistFail(err));
+            })
     }
 }
 

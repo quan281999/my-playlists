@@ -28,6 +28,13 @@ const addSongsSuccess = () => {
     }
 }
 
+const addSongsFail = (error) => {
+    return {
+        type: actionTypes.ADD_SONGS_SUCCESS,
+        error
+    }
+}
+
 // Add new songs to the database
 const updateDatabase = (songs, index, userId, mode) => {
     return dispatch => {
@@ -42,12 +49,16 @@ const updateDatabase = (songs, index, userId, mode) => {
         var update = {};
         const name = playlist.name;
         update[userId + '/playlists/' + index] = {name, songs: newSongs};
-        projectDatabase.ref().update(update).then(() => {
-            dispatch(addingSongsEnd());
-            dispatch(addSongsSuccess());
-            dispatch(setSongs(newSongs));
-            dispatch(setPlayingOrder(mode, newSongs.length));
-        })
+        projectDatabase.ref().update(update)
+            .then(() => {
+                dispatch(addingSongsEnd());
+                dispatch(addSongsSuccess());
+                dispatch(setSongs(newSongs));
+                dispatch(setPlayingOrder(mode, newSongs.length));
+            })
+            .catch(err => {
+                dispatch(addSongsFail(err));
+            })
     }
 }
 
@@ -64,13 +75,17 @@ const getURLs = (files, userId, index, mode) => {
             //     songs.push({name: file.name, url})
             // })
         })
-        Promise.all(promises).then((urls) => {
-            for (let i = 0; i < files.length; i++) {
-                const song = {name: files[i].name, url: urls[i]};
-                songs.push(song);
-            }
-            dispatch(updateDatabase(songs, index, userId, mode));
-        })
+        Promise.all(promises)
+            .then(urls => {
+                for (let i = 0; i < files.length; i++) {
+                    const song = {name: files[i].name, url: urls[i]};
+                    songs.push(song);
+                }
+                dispatch(updateDatabase(songs, index, userId, mode));
+            })
+            .catch(err => {
+                dispatch(addSongsFail(err));
+            })
     }
 }
 
@@ -86,9 +101,13 @@ export const uploadFiles = (files, userId, index, mode) => {
                 //     dispatch(storeSongs(files[i].name, userId, index))
                 // })
         }
-        Promise.all(promises).then(() => {
-            dispatch(getURLs(files, userId, index, mode));
-        })
+        Promise.all(promises)
+            .then(() => {
+                dispatch(getURLs(files, userId, index, mode));
+            })
+            .catch(err => {
+                dispatch(addSongsFail(err));
+            })
     }
 }
 
@@ -161,22 +180,52 @@ const deleteSongSuccess = () => {
     }
 }
 
+const deleteSongsFail = (error) => {
+    return {
+        type: actionTypes.DELETE_SONGS_FAIL,
+        error
+    }
+}
+
+const resetPlaying = () => {
+    return {
+        type: actionTypes.RESET_PLAYING
+    }
+}
+
+export const setSongsAfterDelete = (songs, playingId) => {
+    return {
+        type: actionTypes.SET_SONGS_AFTER_DELETE,
+        songs,
+        playingId
+    }
+}
+
 // Delete the selected song in the database
 export const deleteSong = (index, playingId, userId, playlistIndex, playlistName, songs, mode) => {
     return dispatch => {
+        const song = songs[playingId];
         dispatch(deleteSongStart());
         const newSongs = [...songs.slice(0, index), ...songs.slice(index + 1)];
         var update = {};
         update['/' + userId + '/playlists/' + playlistIndex] = {name: playlistName,songs: newSongs};
-        projectDatabase.ref().update(update).then(() => {
-            dispatch(setPlayingOrder(mode, newSongs.length));
-            if (index === playingId) {
-                dispatch(nextSong());
-            }
-            dispatch(deleteSongSuccess());
-            dispatch(setSongs(newSongs));
-            dispatch(deletingSongEnd());
-        })
+        projectDatabase.ref().update(update)
+            .then(() => {
+                dispatch(setPlayingOrder(mode, newSongs.length));
+                if (index === playingId) {
+                    dispatch(resetPlaying());
+                }
+                if (playingId != null && index !== playingId) {
+                    dispatch(setSongsAfterDelete(newSongs, newSongs.indexOf(song)));
+                } else {
+                    dispatch(setSongs(newSongs));
+                }
+                dispatch(deleteSongSuccess());
+                dispatch(deletingSongEnd());
+            })
+            .catch(err => {
+                dispatch(deleteSongsFail(err));
+            })
     }
 }
 

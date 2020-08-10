@@ -158,6 +158,27 @@ class Playlists extends Component {
             );
         }
 
+        // Check whether there is error or not
+        if (this.props.error && this.props.adding) {
+            modal = (
+                <Modal 
+                    show={true} 
+                    close={this.closeModal}
+                    top='40%'>
+                        <p>{this.props.error.message}</p>
+                </Modal>
+            );
+        } else if (this.props.error && this.props.deleting) {
+            deleteModal = (
+                <Modal 
+                    show={true} 
+                    close={this.closeDeleteModal}
+                    top='40%'>
+                        <p>{this.props.error.message}</p>
+                </Modal>
+            );
+        }
+
         // Set up the content of the page
         let content = (
             <div className={classes.Playlists}>
@@ -189,7 +210,8 @@ const mapStatetoProps = state => {
         loading: state.playlists.loading,
         modalLoading: state.playlists.modalLoading,
         adding: state.playlists.adding,
-        deleting: state.playlists.deleting
+        deleting: state.playlists.deleting,
+        error: state.playlists.error
     }
 }
 
