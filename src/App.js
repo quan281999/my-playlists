@@ -2,12 +2,21 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
 import './App.css';
+import asyncComponent from './hoc/asyncComponent/asyncComponent';
 import Auth from './containers/Auth/Auth';
-import Playlists from './containers/Playlists/Playlists';
-import Songs from './containers/Songs/Songs';
+// import Playlists from './containers/Playlists/Playlists';
+// import Songs from './containers/Songs/Songs';
 import Layout from './containers/Layout/Layout';
 import Logout from './containers/Auth/Logout/Logout';
 import * as actions from './store/actions/index';
+
+const asyncPlaylists = asyncComponent(() => {
+  return import('./containers/Playlists/Playlists');
+})
+
+const asyncSongs = asyncComponent(() => {
+  return import('./containers/Songs/Songs');
+})
 
 class App extends Component {
   componentDidMount() {
@@ -19,8 +28,8 @@ class App extends Component {
     if (this.props.isAuthenticated) {
       route = (
         <Switch>
-          <Route path='/playlists/:id' component={Songs}></Route>
-          <Route path='/playlists' component={Playlists}></Route>
+          <Route path='/playlists/:id' component={asyncSongs}></Route>
+          <Route path='/playlists' component={asyncPlaylists}></Route>
           <Route path='/logout' component={Logout}></Route>
           <Redirect to='/playlists'/>
         </Switch>
